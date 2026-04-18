@@ -1,0 +1,234 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ideias da Estrutura - Terço da Juventude</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+    <main class="container">
+        <header class="header">
+            <img src="{% static 'Logo.png' %}" alt="Logo Terço da Juventude" class="logo">
+            <div>
+                <h1 class="title">Quadro de Ideias da Estrutura</h1>
+                <p class="subtitle">Terço da Juventude</p>
+            </div>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="sugestoes">Sugestões</button>
+            <button class="tab" data-tab="formas">Formas</button>
+            <button class="tab" data-tab="elementos">Elementos</button>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" action="{% url 'home' %}">
+            {% csrf_token %}
+            <input type="hidden" name="categoria" id="categoriaInput" value="sugestoes">
+
+            <div class="form-layout">
+                <div class="search-wrapper">
+                    <input type="text" name="titulo" class="search-input" placeholder="Digite a sua ideia..." required>
+                </div>
+
+                <div class="upload-zone hidden" id="uploadZone">
+                    <input class="upload-input" name="imagem" type="file" accept="image/*" id="fileInput">
+
+                    <div class="upload-content" id="uploadContent">
+                        <div class="upload-icon-wrap">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <polyline points="21 15 16 10 5 21"/>
+                            </svg>
+                        </div>
+                        <p class="upload-title">Arraste uma imagem aqui</p>
+                        <p class="upload-hint">ou <span class="upload-link">clique para selecionar</span></p>
+                        <p class="upload-formats">PNG, JPG, WEBP</p>
+                    </div>
+
+                    <div class="upload-preview" id="uploadPreview">
+                        <img id="previewImg" src="" alt="Preview">
+                        <div class="preview-overlay">
+                            <button type="button" class="preview-change" id="changeBtn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="17 8 12 3 7 8"/>
+                                    <line x1="12" y1="3" x2="12" y2="15"/>
+                                </svg>
+                                Trocar imagem
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="submit-row">
+                    <button type="submit" class="button button--pan"><span>Enviar ideia</span></button>
+                </div>
+            </div>
+        </form>
+
+        <!-- ═══ SUGESTÕES ═══ -->
+        <section class="ideias-secao" id="secao-sugestoes">
+            <h2 class="secao-titulo">Sugestões</h2>
+            <div class="ideias-lista texto-lista">
+                {% for ideia in sugestoes %}
+                <div class="ideia-card texto-only">
+                    <div class="ideia-conteudo">
+                        <h3 class="ideia-titulo">{{ ideia.titulo }}</h3>
+                        <span class="ideia-data">{{ ideia.data_criacao|date:"d/m/Y" }}</span>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="nenhuma-ideia">Nenhuma sugestão ainda. Seja o primeiro!</p>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- ═══ FORMAS ═══ -->
+        <section class="ideias-secao" id="secao-formas">
+            <h2 class="secao-titulo">Formas</h2>
+            <div class="ideias-lista">
+                {% for ideia in formas %}
+                <div class="ideia-card">
+                    {% if ideia.imagem %}
+                    <div class="ideia-imagem">
+                        <img src="{{ ideia.imagem.url }}" alt="{{ ideia.titulo }}">
+                        <a href="{{ ideia.imagem.url }}" download class="btn-download" title="Baixar imagem">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Baixar
+                        </a>
+                    </div>
+                    {% endif %}
+                    <div class="ideia-conteudo">
+                        <h3 class="ideia-titulo">{{ ideia.titulo }}</h3>
+                        <span class="ideia-data">{{ ideia.data_criacao|date:"d/m/Y" }}</span>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="nenhuma-ideia">Nenhuma forma adicionada ainda.</p>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- ═══ ELEMENTOS ═══ -->
+        <section class="ideias-secao" id="secao-elementos">
+            <h2 class="secao-titulo">Elementos</h2>
+            <div class="ideias-lista">
+                {% for ideia in elementos %}
+                <div class="ideia-card">
+                    {% if ideia.imagem %}
+                    <div class="ideia-imagem">
+                        <img src="{{ ideia.imagem.url }}" alt="{{ ideia.titulo }}">
+                        <a href="{{ ideia.imagem.url }}" download class="btn-download" title="Baixar imagem">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Baixar
+                        </a>
+                    </div>
+                    {% endif %}
+                    <div class="ideia-conteudo">
+                        <h3 class="ideia-titulo">{{ ideia.titulo }}</h3>
+                        <span class="ideia-data">{{ ideia.data_criacao|date:"d/m/Y" }}</span>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="nenhuma-ideia">Nenhum elemento adicionado ainda.</p>
+                {% endfor %}
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        const tabs = document.querySelectorAll('.tab');
+        const categoriaInput = document.getElementById('categoriaInput');
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+
+        const secoes = {
+            sugestoes: document.getElementById('secao-sugestoes'),
+            formas: document.getElementById('secao-formas'),
+            elementos: document.getElementById('secao-elementos'),
+        };
+
+        function setTab(tabName) {
+            tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
+            categoriaInput.value = tabName;
+
+            if (tabName === 'sugestoes') {
+                uploadZone.classList.add('hidden');
+                fileInput.removeAttribute('required');
+            } else {
+                uploadZone.classList.remove('hidden');
+            }
+
+            Object.entries(secoes).forEach(([key, sec]) => {
+                sec.classList.toggle('secao-destaque', key === tabName);
+            });
+
+            if (secoes[tabName]) {
+                setTimeout(() => {
+                    secoes[tabName].scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 50);
+            }
+        }
+
+        tabs.forEach(tab => tab.addEventListener('click', () => setTab(tab.dataset.tab)));
+        setTab('sugestoes');
+
+        // Upload preview
+        const uploadContent = document.getElementById('uploadContent');
+        const uploadPreview = document.getElementById('uploadPreview');
+        const previewImg = document.getElementById('previewImg');
+        const changeBtn = document.getElementById('changeBtn');
+
+        function showPreview(file) {
+            if (!file || !file.type.startsWith('image/')) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                previewImg.src = e.target.result;
+                uploadContent.style.display = 'none';
+                uploadPreview.style.display = 'flex';
+                uploadZone.classList.add('has-image');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        fileInput.addEventListener('change', e => { if (e.target.files[0]) showPreview(e.target.files[0]); });
+
+        changeBtn.addEventListener('click', e => {
+            e.stopPropagation();
+            fileInput.value = '';
+            uploadContent.style.display = 'flex';
+            uploadPreview.style.display = 'none';
+            uploadZone.classList.remove('has-image');
+            fileInput.click();
+        });
+
+        uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+        uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+        uploadZone.addEventListener('drop', e => {
+            e.preventDefault();
+            uploadZone.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                const dt = new DataTransfer();
+                dt.items.add(file);
+                fileInput.files = dt.files;
+                showPreview(file);
+            }
+        });
+    </script>
+
+</body>
+</html>
