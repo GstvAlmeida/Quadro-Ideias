@@ -44,11 +44,27 @@ body {
     margin-top: 5px;
 }
 
+/* ══════════════════════════════════════
+   LAYOUT PRINCIPAL: duas colunas
+══════════════════════════════════════ */
+.main-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 48px;
+    align-items: start;
+}
+
+/* ── Coluna esquerda ── */
+.coluna-form {
+    min-width: 0;
+}
+
 /* ── Tabs ── */
 .tabs {
     display: flex;
     gap: 15px;
-    margin-bottom: 50px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
 }
 
 .tab {
@@ -77,7 +93,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 28px;
-    max-width: 640px;
 }
 
 .search-wrapper {
@@ -107,17 +122,15 @@ body {
     background: rgba(255,255,255,0.55);
     backdrop-filter: blur(6px);
     cursor: pointer;
-    transition: border-color 0.3s, background 0.3s, box-shadow 0.3s, opacity 0.3s, max-height 0.4s;
+    transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
     overflow: hidden;
-    min-height: 220px;
+    min-height: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.upload-zone.hidden {
-    display: none;
-}
+.upload-zone.hidden { display: none; }
 
 .upload-zone:hover,
 .upload-zone.drag-over {
@@ -129,7 +142,7 @@ body {
 .upload-zone.has-image {
     border-style: solid;
     border-color: #9776b5;
-    min-height: 320px;
+    min-height: 280px;
 }
 
 .upload-input {
@@ -149,7 +162,7 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    padding: 48px 32px;
+    padding: 40px 32px;
     text-align: center;
     pointer-events: none;
     user-select: none;
@@ -268,6 +281,115 @@ body {
 .button--pan:hover::before { transform: translate3d(0,0,0); }
 
 /* ══════════════════════════════════════
+   CARD DO SANTO DO MÊS
+══════════════════════════════════════ */
+.coluna-santo {
+    position: sticky;
+    top: 40px;
+}
+
+.santo-card {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    border: 1.5px solid rgba(151, 118, 181, 0.25);
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(151, 118, 181, 0.12);
+    transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.santo-card:hover {
+    box-shadow: 0 12px 40px rgba(151, 118, 181, 0.2);
+    transform: translateY(-2px);
+}
+
+.santo-badge {
+    background: linear-gradient(135deg, #9776b5, #7a5a9e);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 8px 20px;
+    text-align: center;
+}
+
+.santo-imagem-wrap {
+    width: 100%;
+    height: 260px;
+    overflow: hidden;
+    background: linear-gradient(160deg, #e8dff5, #d5c8ea);
+    position: relative;
+}
+
+.santo-imagem {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.santo-card:hover .santo-imagem {
+    transform: scale(1.03);
+}
+
+/* Placeholder quando não há imagem */
+.santo-placeholder {
+    display: none;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: #a090bb;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.5;
+    padding: 20px;
+}
+
+.santo-info {
+    padding: 20px 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.santo-nome {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #2c1e3d;
+    letter-spacing: -0.2px;
+}
+
+.santo-descricao {
+    font-size: 0.88rem;
+    color: #5a4a6e;
+    line-height: 1.65;
+}
+
+.santo-festa {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #9776b5;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 4px;
+}
+
+.santo-festa::before {
+    content: '✦';
+    font-size: 0.65rem;
+}
+
+/* ══════════════════════════════════════
    SEÇÕES DE IDEIAS
 ══════════════════════════════════════ */
 .ideias-secao {
@@ -301,7 +423,6 @@ body {
     border-radius: 2px;
 }
 
-/* ── Lista de ideias ── */
 .ideias-lista {
     display: flex;
     flex-direction: column;
@@ -337,7 +458,7 @@ body {
     width: 100%;
     height: 100%;
     max-height: 560px;
-    object-fit: contain;  /* Mostra imagem inteira sem corte */
+    object-fit: contain;
     display: block;
     background: #f0ebf8;
 }
@@ -360,7 +481,7 @@ body {
     text-decoration: none;
     cursor: pointer;
     backdrop-filter: blur(6px);
-    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s, opacity 0.2s;
     opacity: 0;
     transform: translateY(6px);
 }
@@ -399,7 +520,7 @@ body {
     white-space: nowrap;
 }
 
-/* ── Card só texto (Sugestões) ── */
+/* ── Card só texto ── */
 .ideia-card.texto-only {
     border-left: 4px solid #9776b5;
 }
@@ -408,10 +529,35 @@ body {
     padding: 22px 24px;
 }
 
-/* ── Empty state ── */
 .nenhuma-ideia {
     font-size: 1rem;
     color: #a095ad;
     font-style: italic;
     padding: 20px 0;
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVO
+══════════════════════════════════════ */
+@media (max-width: 900px) {
+    .main-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .coluna-santo {
+        position: static;
+        order: -1; /* aparece antes do formulário no mobile */
+    }
+
+    .santo-imagem-wrap {
+        height: 200px;
+    }
+
+    .container {
+        padding: 40px 24px;
+    }
+
+    .title {
+        font-size: 2.2rem;
+    }
 }
